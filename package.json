@@ -1,0 +1,19 @@
+{
+  "name": "node_js_course",
+  "version": "0.0.1",
+  "description": "NodeJS course",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sinkevichdenis/node_js_course.git"
+  },
+  "author": "Dzianis Sinkevich1",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sinkevichdenis/node_js_course/issues"
+  },
+  "homepage": "https://github.com/sinkevichdenis/node_js_course#readme"
+}
