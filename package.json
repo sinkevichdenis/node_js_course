@@ -2,9 +2,8 @@
   "name": "node_js_course",
   "version": "0.0.1",
   "description": "NodeJS course",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start_1-1": "nodemon lesson_01/index.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +14,8 @@
   "bugs": {
     "url": "https://github.com/sinkevichdenis/node_js_course/issues"
   },
-  "homepage": "https://github.com/sinkevichdenis/node_js_course#readme"
+  "homepage": "https://github.com/sinkevichdenis/node_js_course#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
 }
