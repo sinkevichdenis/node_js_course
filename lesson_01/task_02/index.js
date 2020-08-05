@@ -31,4 +31,10 @@ csv()
     .pipe(createWStream(PATH_WRITTEN_BY_LINE));
 
 // written whole
-rStream.pipe(csv()).pipe(createWStream(PATH_WRITTEN_WHOLE));
+csv()
+    .fromFile(TEMPLATE_PATH)
+    .then((json)=>{
+        fs.writeFile(PATH_WRITTEN_WHOLE, JSON.stringify(json), 'utf8', error => {
+            error ? onError(error) : onComplete();
+        } );
+    });
