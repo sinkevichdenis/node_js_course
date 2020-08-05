@@ -1,5 +1,6 @@
 import fs from 'fs';
 import csv from 'csvtojson';
+import path from 'path';
 
 const onError = err => {
     console.log(err.message)
@@ -11,10 +12,13 @@ const onNext = json => {
     console.log(json)
 };
 
-const PATH_WRITTEN_BY_LINE = './assets/fromCsvByLine.txt';
-const PATH_WRITTEN_WHOLE = './assets/fromCsvWhole.txt';
+const getPath = route => path.normalize(route);
 
-const rStream = fs.createReadStream('./assets/csv/nodejs-hw1-ex1.csv');
+const PATH_WRITTEN_BY_LINE = getPath('./assets/fromCsvByLine.txt');
+const PATH_WRITTEN_WHOLE = getPath('./assets/fromCsvWhole.txt');
+const TEMPLATE_PATH = getPath('./assets/csv/nodejs-hw1-ex1.csv');
+
+const rStream = fs.createReadStream(TEMPLATE_PATH);
 const createWStream = path => fs
     .createWriteStream(path)
     .on('error', onError)
