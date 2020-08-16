@@ -3,7 +3,10 @@
   "version": "0.0.1",
   "description": "NodeJS course",
   "scripts": {
-    "start_1-1": "nodemon lesson_01/index.js"
+    "start_1-1": "nodemon lesson_01/task_01",
+    "start_1-2": "nodemon lesson_01/task_02 --exec babel-node",
+    "transpile": "babel ./lesson_01 --out-dir dist",
+    "clean": "rimraf dist"
   },
   "repository": {
     "type": "git",
@@ -16,6 +19,14 @@
   },
   "homepage": "https://github.com/sinkevichdenis/node_js_course#readme",
   "devDependencies": {
-    "nodemon": "^2.0.4"
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.11.1",
+    "@babel/node": "^7.10.5",
+    "@babel/preset-env": "^7.11.0",
+    "nodemon": "^2.0.4",
+    "rimraf": "^3.0.2"
+  },
+  "dependencies": {
+    "csvtojson": "^2.0.10"
   }
 }
