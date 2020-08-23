@@ -25,37 +25,27 @@ export const HomePage = () => {
     }, [error, message, clearErrors]);
 
     const onChange = event => {
-        console.log({...form, [event.target.name]: event.target.value});
         setForm({...form, [event.target.name]: event.target.value})
     };
 
-    const onAdd = async () => {
+    const handleRequest = async (callback) => {
         try {
-            const id = uuid();
-            const data = await request('/', 'POST', {...form, id});
+            const data = await callback();
             message(data.message,'success');
             setForm({...initialUser});
         } catch (e) {
             message(e.message,'error');
         }
+    };
+
+    const onAdd = async () => {
+        await handleRequest( () => request('/', 'POST', {...form, id: uuid()}));
     };
     const onUpdate = async () => {
-        try {
-            const data = await request('/', 'PUT', {...form});
-            message(data.message,'success');
-            setForm({...initialUser});
-        } catch (e) {
-            message(e.message,'error');
-        }
+        await handleRequest( () => request('/', 'PUT', {...form}));
     };
     const onRemove = async () => {
-        try {
-            const data = await request('/', 'DELETE', {login: form.login});
-            message(data.message,'success');
-            setForm({...initialUser});
-        } catch (e) {
-            message(e.message,'error');
-        }
+        await handleRequest( () => request('/', 'DELETE', {login: form.login}));
     };
 
     const onGetList = async() => {
