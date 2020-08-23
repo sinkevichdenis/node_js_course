@@ -1,58 +1,63 @@
 import {Router} from 'express';
+import {addUserSchema, updateUserSchema, removeUserSchema} from '../schemas/user.schema';
+import {getLoginMatch, handleError} from '../utils';
 
 export const router = Router();
 
 let store = {};
 
-router.get('/api', (req, res) =>  {
+router.get('/list', (req, res) =>  {
     try {
         res.status(201).json({message: 'User list loaded', users: Object.values(store)});
     } catch (e) {
-        res.status(500).json({message: 'GET not work'});
+        handleError(res, e);
     };
 });
 
-router.post('/', (req, res) =>  {
+router.post('/', async (req, res) =>  {
     try {
-        const {id} = req.body;
-        if (id) {
+        const {id, login} = req.body;
+        await addUserSchema.validateAsync(req.body);
+        const match = getLoginMatch(store, login);
+        if (!match) {
             store[id] = {...req.body};
+            res.status(201).json({message: 'User added'});
         } else {
-            res.status(204).json({message: 'No content'});
+            res.status(400).json({message: 'User already exist'});
         }
-        res.status(201).json({message: 'User added'});
-        console.log('post', store)
     } catch (e) {
-        res.status(500).json({message: 'POST not work'});
+        handleError(res, e);
     };
 });
 
-router.put('/', (req, res) =>  {
+router.put('/', async (req, res) =>  {
     try {
         const {login} = req.body;
-        const match = Object.values(store).find(item => item.login === login);
+        await updateUserSchema.validateAsync(req.body);
+        const match = getLoginMatch(store, login);
         if (match) {
             store[match.id] = {...req.body, id: match.id};
             res.status(201).json({message: 'User updated'});
         } else {
-            res.status(202).json({message: 'User does not exist'});
+            res.status(400).json({message: 'User does not exist'});
         }
     } catch (e) {
-        res.status(500).json({message: 'PUT not work'});
+        handleError(res, e);
     };
 });
 
-router.delete('/', (req, res) =>  {
+router.delete('/', async (req, res) =>  {
     try {
         const {login} = req.body;
-        const match = Object.values(store).find(item => item.login === login);
+        await removeUserSchema.validateAsync(req.body);
+        const match = getLoginMatch(store, login);
         if (match) {
             store[match.id] = {...store[match.id], isDeleted: true};
             res.status(201).json({message: 'User deleted'});
         } else {
-            res.status(202).json({message: 'User does not exist'});
+            res.status(400).json({message: 'User does not exist'});
         }
     } catch (e) {
-        res.status(500).json({message: 'Delete not work'});
+        handleError(res, e);
     };
 });

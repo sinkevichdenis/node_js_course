@@ -25,6 +25,7 @@ export const HomePage = () => {
     }, [error, message, clearErrors]);
 
     const onChange = event => {
+        console.log({...form, [event.target.name]: event.target.value});
         setForm({...form, [event.target.name]: event.target.value})
     };
 
@@ -32,7 +33,6 @@ export const HomePage = () => {
         try {
             const id = uuid();
             const data = await request('/', 'POST', {...form, id});
-            console.log('POST', data);
             message(data.message,'success');
             setForm({...initialUser});
         } catch (e) {
@@ -40,7 +40,6 @@ export const HomePage = () => {
         }
     };
     const onUpdate = async () => {
-        console.log('update', form)
         try {
             const data = await request('/', 'PUT', {...form});
             message(data.message,'success');
@@ -50,7 +49,6 @@ export const HomePage = () => {
         }
     };
     const onRemove = async () => {
-        console.log('delete', form)
         try {
             const data = await request('/', 'DELETE', {login: form.login});
             message(data.message,'success');
@@ -62,7 +60,7 @@ export const HomePage = () => {
 
     const onGetList = async() => {
         try {
-            const data = await request('/api');
+            const data = await request('/list');
             setUsers(data.users);
             message(data.message,'success');
         } catch (e) {
