@@ -10,6 +10,8 @@
     "client:2": "npm run start --prefix lesson_02/client",
     "lint": "eslint . --ext .ts",
     "clean": "rimraf dist",
+    "client:install": "npm install --prefix lesson_02/client",
+    "client:build": "npm run build --prefix lesson_02/client",
     "dev": "concurrently \"npm run server:2\" \"npm run client:2\""
   },
   "repository": {

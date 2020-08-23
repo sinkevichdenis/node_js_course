@@ -14,6 +14,6 @@ input {
     justify-content: space-between;
 }
 button {
-    width: 29%;
+    min-width: 29%;
     margin: 20px 2%;
 }

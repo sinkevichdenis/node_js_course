@@ -7,7 +7,7 @@ import './App.css';
 export const App = () => {
     const routes = useRoutes();
     return (
-        <div className="container">
+        <div className="app-container">
             <BrowserRouter>
                 {routes}
             </BrowserRouter>
