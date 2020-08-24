@@ -1,11 +1,11 @@
 import express from 'express';
 import config from './config';
-import {router} from './routes/app.route';
+import { router } from './routes/app.route';
 
 const app = express();
 const PORT = config.get('port');
 
-app.use(express.json({extended: true}));
+app.use(express.json({ extended: true }));
 app.use('/', router);
 
 app.listen(PORT, () => {
@@ -31,12 +31,12 @@ app.listen(PORT, () => {
         });
 */
 
-/*app.use((err, req, res, next) => {
+/* app.use((err, req, res, next) => {
     if (app.get('env') === 'development') {
         const errorHandler = express.errorHandler()
         errorHandler(err, req, res, next);
     } else {
         res.sendStatus(500);
     }
-});*/
+}); */
 
