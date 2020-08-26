@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import uuid from 'react-uuid';
 import {useMessage, useHttp} from '../../hooks';
 import {Results} from '../Results';
 import {Form} from '../Form';
@@ -7,7 +6,6 @@ import './HomePage.css';
 
 export const HomePage = () => {
     const initialUser = {
-        id: null,
         login: '',
         password: '',
         age: null,
@@ -39,7 +37,7 @@ export const HomePage = () => {
     };
 
     const onAdd = async () => {
-        await handleRequest( () => request('/', 'POST', {...form, id: uuid()}));
+        await handleRequest( () => request('/', 'POST', {...form}));
     };
     const onUpdate = async () => {
         await handleRequest( () => request('/', 'PUT', {...form}));

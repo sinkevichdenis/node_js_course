@@ -1,62 +1,54 @@
 import { Router } from 'express';
-import { addUserSchema, updateUserSchema, removeUserSchema } from '../schemas/user.schema';
-import { getLoginMatch, handleError } from '../utils';
+import { handleError } from '../utils';
+import { getUser, getAutoSuggestUsers, removeUser, updateUser, addUser } from '../store/store';
 
 export const router = Router();
 
-const store = {};
-
 router.get('/list', (req, res) =>  {
+    const substring = req.query.substr || '';
+    const limit = parseInt(req.query.limit || 10, 10);
     try {
-        res.status(201).json({ message: 'User list loaded', users: Object.values(store) });
+        res.status(201).json({ message: 'User list loaded', users: getAutoSuggestUsers(substring, limit) });
     } catch (e) {
         handleError(res, e);
     }
 });
 
-router.post('/', async (req, res) =>  {
+router.get('/user/:id', async (req, res) => {
     try {
-        const { id, login } = req.body;
-        await addUserSchema.validateAsync(req.body);
-        const match = getLoginMatch(store, login);
-        if (!match) {
-            store[id] = { ...req.body };
-            res.status(201).json({ message: 'User added' });
-        } else {
-            res.status(400).json({ message: 'User already exist' });
-        }
+        const user = await getUser(req.params.id);
+        res.status(user ? 201 : 400).json({
+            user,
+            hasUser: !!user,
+            message: user ? 'User found' : 'User does not exist'
+        });
     } catch (e) {
         handleError(res, e);
     }
 });
 
-router.put('/', async (req, res) =>  {
+router.post('/user', async (req, res) =>  {
     try {
-        const { login } = req.body;
-        await updateUserSchema.validateAsync(req.body);
-        const match = getLoginMatch(store, login);
-        if (match) {
-            store[match.id] = { ...req.body, id: match.id };
-            res.status(201).json({ message: 'User updated' });
-        } else {
-            res.status(400).json({ message: 'User does not exist' });
-        }
+        const isCompleted = await addUser(req.body);
+        res.status(isCompleted ? 201 : 400).json({ message: isCompleted ? 'User added' : 'User does not exist'  });
     } catch (e) {
         handleError(res, e);
     }
 });
 
-router.delete('/', async (req, res) =>  {
+router.put('/user/:id', async (req, res) =>  {
     try {
-        const { login } = req.body;
-        await removeUserSchema.validateAsync(req.body);
-        const match = getLoginMatch(store, login);
-        if (match) {
-            store[match.id] = { ...store[match.id], isDeleted: true };
-            res.status(201).json({ message: 'User deleted' });
-        } else {
-            res.status(400).json({ message: 'User does not exist' });
-        }
+        const isCompleted = await updateUser(req.params.id, req.body);
+        res.status(isCompleted ? 201 : 400).json({ message: isCompleted ? 'User updated' : 'User does not exist'  });
+    } catch (e) {
+        handleError(res, e);
+    }
+});
+
+router.delete('/user/:id', async (req, res) =>  {
+    try {
+        const isCompleted = await removeUser(req.params.id);
+        res.status(isCompleted ? 201 : 400).json({ message: isCompleted ? 'User deleted' : 'User does not exist'  });
     } catch (e) {
         handleError(res, e);
     }
