@@ -3,10 +3,16 @@
   "version": "0.0.1",
   "description": "NodeJS course",
   "scripts": {
-    "start_1-1": "nodemon lesson_01/task_01",
-    "start_1-2": "nodemon lesson_01/task_02 --exec babel-node",
+    "start:1-1": "nodemon lesson_01/task_01",
+    "start:1-2": "nodemon lesson_01/task_02 --exec babel-node",
     "transpile": "babel ./lesson_01 --out-dir dist",
-    "clean": "rimraf dist"
+    "server:2": "nodemon lesson_02/app.js",
+    "client:2": "npm run start --prefix lesson_02/client",
+    "lint": "eslint . --ext .js",
+    "clean": "rimraf dist",
+    "client:install": "npm install --prefix lesson_02/client",
+    "client:build": "npm run build --prefix lesson_02/client",
+    "dev": "concurrently \"npm run server:2\" \"npm run client:2\""
   },
   "repository": {
     "type": "git",
@@ -23,10 +29,28 @@
     "@babel/core": "^7.11.1",
     "@babel/node": "^7.10.5",
     "@babel/preset-env": "^7.11.0",
+    "@typescript-eslint/eslint-plugin": "^3.9.1",
+    "concurrently": "^5.3.0",
+    "eslint": "^6.8.0",
+    "eslint-config-dev": "^2.0.0",
+    "eslint-config-developit": "^1.2.0",
+    "eslint-plugin-flowtype": "^5.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-react": "^7.20.6",
+    "eslint-plugin-react-hooks": "^4.1.0",
     "nodemon": "^2.0.4",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "ts-node": "^9.0.0",
+    "typescript": "^3.9.7"
   },
   "dependencies": {
-    "csvtojson": "^2.0.10"
+    "@hapi/joi": "^17.1.1",
+    "csvtojson": "^2.0.10",
+    "express": "^4.17.1",
+    "nconf": "^0.10.0",
+    "react": "^16.13.1",
+    "react-uuid": "^1.0.2"
   }
 }
