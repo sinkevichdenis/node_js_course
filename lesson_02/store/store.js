@@ -30,10 +30,11 @@ export const addUser = async (user) => {
 export const updateUser = async (id, user) => {
     const index = getIndexStoreMatch(users, id, 'id');
     const isVerified = index !== -1;
+    const oldUser = users[index];
 
-    if (isVerified) {
+    if (isVerified && !oldUser.isDeleted) {
         await validateUser('update', user);
-        users.splice(index, 1, { ...users[index], ...user });
+        users.splice(index, 1, { ...oldUser, ...user });
     }
     return isVerified;
 };
