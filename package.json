@@ -6,13 +6,9 @@
     "start:1-1": "nodemon lesson_01/task_01",
     "start:1-2": "nodemon lesson_01/task_02 --exec babel-node",
     "transpile": "babel ./lesson_01 --out-dir dist",
-    "server:2": "nodemon lesson_02/app.js",
-    "client:2": "npm run start --prefix lesson_02/client",
+    "server": "nodemon app/app.js",
     "lint": "eslint . --ext .js",
-    "clean": "rimraf dist",
-    "client:install": "npm install --prefix lesson_02/client",
-    "client:build": "npm run build --prefix lesson_02/client",
-    "dev": "concurrently \"npm run server:2\" \"npm run client:2\""
+    "clean": "rimraf dist"
   },
   "repository": {
     "type": "git",
