@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { handleError } from '../services/error.service';
-import { getUser, getUserList, removeUser, updateUser, addUser } from '../services/user.service';
+import { handleError, handleSuccess } from '../services/feedbacks.service';
+import { getUser, getUserList, removeUser, updateUser, addUser } from '../services/users.service';
 
 export const router = Router();
 
@@ -9,7 +9,7 @@ router.get('/list', async (req, res) =>  {
     const limit = parseInt(req.query.limit || 10, 10);
     try {
         const users = await getUserList(substring, limit);
-        res.status(201).json({ message: 'User list loaded', users });
+        handleSuccess(res, 'listLoad', { users });
     } catch (e) {
         handleError(res, e);
     }
@@ -18,11 +18,7 @@ router.get('/list', async (req, res) =>  {
 router.get('/user/:id', async (req, res) => {
     try {
         const user = await getUser(req.params.id);
-        res.status(201).json({
-            user,
-            hasUser: !!user,
-            message: 'User found'
-        });
+        handleSuccess(res, 'get', { user, hasUser: !!user });
     } catch (e) {
         handleError(res, e);
     }
@@ -31,7 +27,7 @@ router.get('/user/:id', async (req, res) => {
 router.post('/user', async (req, res) =>  {
     try {
         await addUser(req.body);
-        res.status(201).json({ message: 'User added' });
+        handleSuccess(res, 'add');
     } catch (e) {
         handleError(res, e);
     }
@@ -40,7 +36,7 @@ router.post('/user', async (req, res) =>  {
 router.put('/user/:id', async (req, res) =>  {
     try {
         await updateUser(req.params.id, req.body);
-        res.status(201).json({ message: 'User updated' });
+        handleSuccess(res, 'update');
     } catch (e) {
         handleError(res, e);
     }
@@ -49,7 +45,7 @@ router.put('/user/:id', async (req, res) =>  {
 router.delete('/user/:id', async (req, res) =>  {
     try {
         await removeUser(req.params.id);
-        res.status(201).json({ message: 'User deleted' });
+        handleSuccess(res, 'remove');
     } catch (e) {
         handleError(res, e);
     }
