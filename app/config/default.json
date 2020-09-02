@@ -1,3 +1,6 @@
 {
-  "port": 6000
+  "port": 6000,
+  "db": {
+    "url": "postgres://stfwrlrj:up7UlBBX50iObmzLK_QWu1t2zl-nm1YN@kandula.db.elephantsql.com:5432/stfwrlrj"
+  }
 }
