@@ -2,7 +2,7 @@ import { Sequelize } from 'sequelize';
 import config from '../config';
 import { defineUserModel } from '../models/user';
 
-const dbUrl = config.get('db').url;
+const dbUrl = config.get('url');
 
 const sequelize = new Sequelize(dbUrl);
 export const User = defineUserModel(sequelize);

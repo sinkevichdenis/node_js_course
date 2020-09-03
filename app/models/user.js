@@ -2,9 +2,9 @@ import { DataTypes } from 'sequelize';
 
 export const defineUserModel = sequelize => sequelize.define('users', {
     id: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        primaryKey: true
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
     },
     login: {
         type: DataTypes.STRING,

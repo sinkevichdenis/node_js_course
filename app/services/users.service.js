@@ -4,7 +4,19 @@ import { Op } from 'sequelize';
 import { MESSAGES } from '../const';
 
 const errorNotFoundMsg = MESSAGES.errors.notFound;
-const getMatchById = async (id) => await User.findByPk(id);
+const getMatchById = async (id) => await User.findOne({
+    where: {
+        [Op.and]: [{
+            id: {
+                [Op.eq]: id
+            }
+        }, {
+            is_deleted: {
+                [Op.eq]: false
+            }
+        }]
+    }
+});
 
 export const getUserList = async (substring = '', limit = 10) => (
     User.findAll({
@@ -28,14 +40,15 @@ export const getUserList = async (substring = '', limit = 10) => (
 
 export const getUser = async (id) => {
     const user = await getMatchById(id);
-    if (user && !user.is_deleted) {
+    if (user) {
         return user;
     }
     throw new ReferenceError(errorNotFoundMsg);
 };
 
 export const addUser = async (user) => {
-    await User.create({ ...user, id: uuid() });
+    //id: uuid()
+    await User.create({ ...user });
 };
 
 export const updateUser = async (id, user) => {
