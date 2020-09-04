@@ -1,10 +1,9 @@
-import { User } from '../data_access';
 import { Op } from 'sequelize';
 import { MESSAGES } from '../const';
 
 const errorNotFoundMsg = MESSAGES.errors.notFound;
 
-export const connectApi = model => {
+export const connectModel = model => {
     const getMatchById = async (id) => await model.findOne({
         where: {
             [Op.and]: [{
@@ -40,21 +39,21 @@ export const connectApi = model => {
     );
 
     const get = async (id) => {
-        const user = await getMatchById(id);
-        if (user) {
-            return user;
+        const data = await getMatchById(id);
+        if (data) {
+            return data;
         }
         throw new ReferenceError(errorNotFoundMsg);
     };
 
-    const add = async (user) => {
-        await model.create({ ...user });
+    const create = async (data) => {
+        await model.create({ ...data });
     };
 
-    const update = async (id, user) => {
+    const update = async (id, data) => {
         const hasMatch = await getMatchById(id);
         if (hasMatch) {
-            await model.update({ ...user }, { where: { id } });
+            await model.update({ ...data }, { where: { id } });
         } else {
             throw new ReferenceError(errorNotFoundMsg);
         }
@@ -72,7 +71,7 @@ export const connectApi = model => {
     return {
         getList,
         get,
-        add,
+        create,
         update,
         remove
     }
