@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize';
 import config from '../config';
-import { defineUserModel } from '../models/user';
+import { defineUserModel } from '../models/user.model';
 
 const dbUrl = config.get('url');
 

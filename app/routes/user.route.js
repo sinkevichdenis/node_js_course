@@ -1,4 +1,4 @@
-import { connectModel } from '../services/crud.service';
+import { connectModel } from '../services/user.service';
 import { handleSuccess } from '../services/utils.service';
 
 export const connectUserRoutes = (model, router) => {
