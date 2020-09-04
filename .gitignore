@@ -1,3 +1,4 @@
 /.idea/
 /node_modules/
-/lesson_02/client/node_modules/
+/app/client/node_modules/
+/app/config/db.json
