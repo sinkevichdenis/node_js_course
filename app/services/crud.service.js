@@ -74,5 +74,5 @@ export const connectModel = model => {
         create,
         update,
         remove
-    }
+    };
 };
