@@ -11,7 +11,7 @@ export const connectUserRoutes = (model, router) => {
             const users = await modelApi.getList(substring, limit);
             handleSuccess(res, 'listLoad', { users });
         } catch (e) {
-            next(e);
+            return next(e);
         }
     });
 
@@ -20,7 +20,7 @@ export const connectUserRoutes = (model, router) => {
             const user = await modelApi.get(req.params.id);
             handleSuccess(res, 'get', { user, hasUser: !!user });
         } catch (e) {
-            next(e);
+            return next(e);
         }
     });
 
@@ -29,7 +29,7 @@ export const connectUserRoutes = (model, router) => {
             await modelApi.create(req.body);
             handleSuccess(res, 'add');
         } catch (e) {
-            next(e);
+            return next(e);
         }
     });
 
@@ -38,7 +38,7 @@ export const connectUserRoutes = (model, router) => {
             await modelApi.update(req.params.id, req.body);
             handleSuccess(res, 'update');
         } catch (e) {
-            next(e);
+            return next(e);
         }
     });
 
@@ -47,7 +47,7 @@ export const connectUserRoutes = (model, router) => {
             await modelApi.remove(req.params.id);
             handleSuccess(res, 'remove');
         } catch (e) {
-            next(e);
+            return next(e);
         }
     });
 };
