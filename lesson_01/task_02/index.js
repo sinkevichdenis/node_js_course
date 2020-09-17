@@ -1,12 +1,12 @@
-import fs from 'fs';
-import csv from 'csvtojson';
-import path from 'path';
+import fs from "fs";
+import csv from "csvtojson";
+import path from "path";
 
 const onError = err => {
     console.log(err.message)
 };
 const onComplete = () => {
-    console.log('Task completed');
+    console.log("Task completed");
 };
 const onNext = json => {
     console.log(json)
@@ -14,15 +14,15 @@ const onNext = json => {
 
 const getPath = route => path.normalize(route);
 
-const PATH_WRITTEN_BY_LINE = getPath('./assets/fromCsvByLine.txt');
-const PATH_WRITTEN_WHOLE = getPath('./assets/fromCsvWhole.txt');
-const TEMPLATE_PATH = getPath('./assets/csv/nodejs-hw1-ex1.csv');
+const PATH_WRITTEN_BY_LINE = getPath("./assets/fromCsvByLine.txt");
+const PATH_WRITTEN_WHOLE = getPath("./assets/fromCsvWhole.txt");
+const TEMPLATE_PATH = getPath("./assets/csv/nodejs-hw1-ex1.csv");
 
 const rStream = fs.createReadStream(TEMPLATE_PATH);
 const createWStream = path => fs
     .createWriteStream(path)
-    .on('error', onError)
-    .on('finish', onComplete);
+    .on("error", onError)
+    .on("finish", onComplete);
 
 // written line by line
 csv()
@@ -34,7 +34,7 @@ csv()
 csv()
     .fromFile(TEMPLATE_PATH)
     .then((json)=>{
-        fs.writeFile(PATH_WRITTEN_WHOLE, JSON.stringify(json), 'utf8', error => {
+        fs.writeFile(PATH_WRITTEN_WHOLE, JSON.stringify(json), "utf8", error => {
             error ? onError(error) : onComplete();
         } );
     });

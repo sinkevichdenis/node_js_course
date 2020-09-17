@@ -1,5 +1,5 @@
-import { Sequelize } from 'sequelize';
-import { MESSAGES } from '../const';
+import { Sequelize } from "sequelize";
+import { MESSAGES } from "../const";
 
 export const ErrorHandler = (res, e) => {
     const messages = {};
@@ -16,11 +16,11 @@ export const ErrorHandler = (res, e) => {
             const errMessages = MESSAGES.errors;
             let message;
             switch (error.validatorKey) {
-                case 'min':
-                case 'max':
+                case "min":
+                case "max":
                     message = `${errMessages[error.validatorKey]} ${error.validatorArgs[0]}`;
                     break;
-                case 'not_unique':
+                case "not_unique":
                     message = `${error.path} ${errMessages[error.validatorKey]}`;
                     break;
                 default:

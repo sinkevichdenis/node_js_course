@@ -7,4 +7,4 @@ is_deleted BOOLEAN DEFAULT false
 );
 
 INSERT INTO Users (login, password, age)
-VALUES ('test', 'test', 10), ('test1', 'test1', 11), ('test2', 'test2', 12), ('nick', 'nick1990', 20);
+VALUES ("test", "test", 10), ("test1", "test1", 11), ("test2", "test2", 12), ("nick", "nick1990", 20);
