@@ -5,5 +5,9 @@
     "groups": "groups",
     "userGroups": "usergroup"
   },
+  "tableAssociationKeys": {
+    "users": "user_id",
+    "groups": "group_id"
+  },
   "permissionTypes": ["READ", "WRITE", "DELETE", "SHARE", "UPLOAD_FILES"]
 }

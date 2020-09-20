@@ -83,6 +83,7 @@ export const defineGroupModel = sequelize => {
 
     Group.removeOneById = async (id) => {
         const result = await Group.destroy({ where: { id } });
+        result[0] && await UserGroup.destroyAssociations(groupsTableName, id);
         if (!result) {
             throw new ReferenceError(errorNotFoundMsg);
         }

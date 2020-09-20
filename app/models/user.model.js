@@ -122,6 +122,7 @@ export const defineUserModel = sequelize => {
 
     User.removeOneById = async (id) => {
         const result = await User.update({ is_deleted: true }, { where: { id } });
+        result[0] && await UserGroup.destroyAssociations(usersTableName, id);
         if (!result[0]) {
             throw new ReferenceError(errorNotFoundMsg);
         }

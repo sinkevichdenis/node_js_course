@@ -5,6 +5,7 @@ import { Group, User } from '../data_access';
 
 const errorNotFoundMsg = MESSAGES.errors.notFound;
 const { userGroups: generalTableName, users: usersTableName, groups: groupsTableName } = config.get('tableNames');
+const associationKeys = config.get('tableAssociationKeys');
 
 export const defineGeneralModel = sequelize => {
     const UserGroup = sequelize.define(generalTableName, {
@@ -13,7 +14,7 @@ export const defineGeneralModel = sequelize => {
             primaryKey: true,
             autoIncrement: true
         },
-        user_id: {
+        [associationKeys[usersTableName]]: {
             type: DataTypes.INTEGER,
             allowNull: false,
             validate: {
@@ -24,7 +25,7 @@ export const defineGeneralModel = sequelize => {
                 key: 'id'
             }
         },
-        group_id: {
+        [associationKeys[groupsTableName]]: {
             type: DataTypes.INTEGER,
             allowNull: false,
             validate: {
@@ -84,6 +85,12 @@ export const defineGeneralModel = sequelize => {
         if (!result) {
             throw new ReferenceError(errorNotFoundMsg);
         }
+    };
+
+    UserGroup.destroyAssociations = async (tableName, id) => {
+        await UserGroup.destroy({
+            where: { [associationKeys[tableName]]: id }
+        });
     };
 
 
