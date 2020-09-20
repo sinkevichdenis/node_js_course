@@ -3,7 +3,7 @@
   "tableNames": {
     "users": "users",
     "groups": "groups",
-    "userGroups": "usergroups"
+    "userGroups": "usergroup"
   },
   "permissionTypes": ["READ", "WRITE", "DELETE", "SHARE", "UPLOAD_FILES"]
 }

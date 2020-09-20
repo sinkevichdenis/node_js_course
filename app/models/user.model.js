@@ -1,12 +1,13 @@
-import { DataTypes, Op } from "sequelize";
-import { MESSAGES } from "../const";
-import config from "../config";
+import { DataTypes, Op } from 'sequelize';
+import { MESSAGES } from '../const';
+import config from '../config';
+import { Group, UserGroup } from '../data_access';
 
 const errorNotFoundMsg = MESSAGES.errors.notFound;
-const userTableName = config.get("tableNames").users;
+const { users: usersTableName } = config.get('tableNames');
 
 export const defineUserModel = sequelize => {
-    const User = sequelize.define(userTableName, {
+    const User = sequelize.define(usersTableName, {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -61,7 +62,22 @@ export const defineUserModel = sequelize => {
                         [Op.eq]: false
                     }
                 }]
-            }
+            },
+            include: [{
+                model: UserGroup,
+                attributes: ['id'],
+                include: [{
+                    model: Group
+                }]
+            }]
+
+        /*    const includeConditions = [{
+                model: UserGroup,
+                include: [{
+                    model: Group
+                }]
+            }]; */
+            // include: includeConditions  doesn't work. Why?
         });
         if (result) {
             return { user: result, hasUser: !!result };
@@ -83,9 +99,16 @@ export const defineUserModel = sequelize => {
                 }]
             },
             order: [
-                ["login", "ASC"]
+                ['login', 'ASC']
             ],
-            limit
+            limit,
+            include: [{
+                model: UserGroup,
+                attributes: ['id'],
+                include: [{
+                    model: Group
+                }]
+            }]
         });
         return { users: result };
     };
@@ -103,6 +126,11 @@ export const defineUserModel = sequelize => {
             throw new ReferenceError(errorNotFoundMsg);
         }
     };
+
+    /*  User.associate = () => {
+       User.hasMany(UserGroup, {foreignKey: 'user_id', sourceKey: 'id'});
+       User.belongsToMany(Group, {through: UserGroup, foreignKey: 'user_id'});
+    }; */
 
     return User;
 };

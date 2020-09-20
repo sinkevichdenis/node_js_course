@@ -1,13 +1,14 @@
-import { DataTypes, Op } from "sequelize";
-import { MESSAGES } from "../const";
-import config from "../config";
+import { DataTypes, Op } from 'sequelize';
+import { MESSAGES } from '../const';
+import config from '../config';
+import { User, UserGroup } from '../data_access';
 
 const errorNotFoundMsg = MESSAGES.errors.notFound;
-const groupTableName = config.get("tableNames").groups;
-const permissionTypes = config.get("permissionTypes");
+const permissionTypes = config.get('permissionTypes');
+const { groups: groupsTableName } = config.get('tableNames');
 
 export const defineGroupModel = sequelize => {
-    const Group = sequelize.define(groupTableName, {
+    const Group = sequelize.define(groupsTableName, {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -36,13 +37,20 @@ export const defineGroupModel = sequelize => {
 
     Group.getAll = async (substring, limit) => {
         const result = await Group.findAll({
+            include: [{
+                model: UserGroup,
+                attributes: ['id'],
+                include: [{
+                    model: User
+                }]
+            }],
             where: {
                 name: {
                     [Op.substring]: substring
                 }
             },
             order: [
-                ["name", "ASC"]
+                ['name', 'ASC']
             ],
             limit
         });
@@ -50,7 +58,16 @@ export const defineGroupModel = sequelize => {
     };
 
     Group.getOneById = async (id) => {
-        const result = await Group.findOne({ where: { id } });
+        const result = await Group.findOne({
+            include: [{
+                model: UserGroup,
+                attributes: ['id'],
+                include: [{
+                    model: User
+                }]
+            }],
+            where: { id }
+        });
         if (result) {
             return { groups: result, hasGroup: !!result };
         }
@@ -70,6 +87,11 @@ export const defineGroupModel = sequelize => {
             throw new ReferenceError(errorNotFoundMsg);
         }
     };
+
+    /*  Group.associate = () => {
+        Group.hasMany(UserGroup, {foreignKey: 'group_id', sourceKey: 'id'});
+        Group.belongsToMany(User, {through: UserGroup, foreignKey: 'group_id'});
+    }; */
 
     return Group;
 };
