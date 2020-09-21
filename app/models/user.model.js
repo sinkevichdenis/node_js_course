@@ -1,10 +1,13 @@
 import { DataTypes, Op } from 'sequelize';
 import { MESSAGES } from '../const';
+import config from '../config';
+import { Group, UserGroup } from '../data_access';
 
 const errorNotFoundMsg = MESSAGES.errors.notFound;
+const { users: usersTableName } = config.get('tableNames');
 
 export const defineUserModel = sequelize => {
-    const User = sequelize.define('users', {
+    const User = sequelize.define(usersTableName, {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -59,31 +62,48 @@ export const defineUserModel = sequelize => {
                         [Op.eq]: false
                     }
                 }]
-            }
+            },
+            include: [{
+                model: UserGroup,
+                attributes: ['id'],
+                include: [{
+                    model: Group
+                }]
+            }]
         });
         if (result) {
-            return result;
+            return { user: result, hasUser: !!result };
         }
         throw new ReferenceError(errorNotFoundMsg);
     };
 
-    User.getAll = async (substring, limit) => await User.findAll({
-        where: {
-            [Op.and]: [{
-                login: {
-                    [Op.substring]: substring
-                }
-            }, {
-                is_deleted: {
-                    [Op.eq]: false
-                }
+    User.getAll = async (substring, limit) => {
+        const result = await User.findAll({
+            where: {
+                [Op.and]: [{
+                    login: {
+                        [Op.substring]: substring
+                    }
+                }, {
+                    is_deleted: {
+                        [Op.eq]: false
+                    }
+                }]
+            },
+            order: [
+                ['login', 'ASC']
+            ],
+            limit,
+            include: [{
+                model: UserGroup,
+                attributes: ['id'],
+                include: [{
+                    model: Group
+                }]
             }]
-        },
-        order: [
-            ['login', 'ASC']
-        ],
-        limit
-    });
+        });
+        return { users: result };
+    };
 
     User.updateOneById = async (data, id) => {
         const result = await User.update({ ...data }, { where: { id } });
@@ -94,9 +114,15 @@ export const defineUserModel = sequelize => {
 
     User.removeOneById = async (id) => {
         const result = await User.update({ is_deleted: true }, { where: { id } });
+        result[0] && await UserGroup.destroyAssociations(usersTableName, id);
         if (!result[0]) {
             throw new ReferenceError(errorNotFoundMsg);
         }
+    };
+
+    User.associate = () => {
+        User.hasMany(UserGroup, { foreignKey: 'user_id', sourceKey: 'id' });
+        User.belongsToMany(Group, { through: UserGroup, foreignKey: 'user_id' });
     };
 
     return User;

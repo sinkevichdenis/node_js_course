@@ -1,30 +1,29 @@
-import { connectModel } from '../services/user.service';
-import { handleSuccess } from '../services/utils.service';
+import { connectModel, handleSuccess } from '../services';
 
-export const connectUserRoutes = (model, router) => {
+export const connectRoutes = (prefix, model, router) => {
     const modelApi = connectModel(model);
 
-    router.get('/list', async (req, res, next) => {
+    router.get(`${prefix}/list`, async (req, res, next) => {
         const substring = req.query.substr || '';
         const limit = parseInt(req.query.limit || 10, 10);
         try {
-            const users = await modelApi.getList(substring, limit);
-            handleSuccess(res, 'listLoad', { users });
+            const result = await modelApi.getList(substring, limit);
+            handleSuccess(res, 'listLoad', result);
         } catch (e) {
             return next(e);
         }
     });
 
-    router.get('/user/:id', async (req, res, next) => {
+    router.get(`${prefix}/:id`, async (req, res, next) => {
         try {
-            const user = await modelApi.get(req.params.id);
-            handleSuccess(res, 'get', { user, hasUser: !!user });
+            const result = await modelApi.get(req.params.id);
+            handleSuccess(res, 'get', result);
         } catch (e) {
             return next(e);
         }
     });
 
-    router.post('/user', async (req, res, next) => {
+    router.post(`${prefix}`, async (req, res, next) => {
         try {
             await modelApi.create(req.body);
             handleSuccess(res, 'add');
@@ -33,7 +32,7 @@ export const connectUserRoutes = (model, router) => {
         }
     });
 
-    router.put('/user/:id', async (req, res, next) => {
+    router.put(`${prefix}/:id`, async (req, res, next) => {
         try {
             await modelApi.update(req.params.id, req.body);
             handleSuccess(res, 'update');
@@ -42,7 +41,7 @@ export const connectUserRoutes = (model, router) => {
         }
     });
 
-    router.delete('/user/:id', async (req, res, next) => {
+    router.delete(`${prefix}/:id`, async (req, res, next) => {
         try {
             await modelApi.remove(req.params.id);
             handleSuccess(res, 'remove');

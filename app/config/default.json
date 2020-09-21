@@ -1,3 +1,13 @@
 {
-  "port": 3000
+  "port": 3000,
+  "tableNames": {
+    "users": "users",
+    "groups": "groups",
+    "userGroups": "usergroup"
+  },
+  "tableAssociationKeys": {
+    "users": "user_id",
+    "groups": "group_id"
+  },
+  "permissionTypes": ["READ", "WRITE", "DELETE", "SHARE", "UPLOAD_FILES"]
 }
