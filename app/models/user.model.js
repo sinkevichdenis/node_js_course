@@ -70,14 +70,6 @@ export const defineUserModel = sequelize => {
                     model: Group
                 }]
             }]
-
-        /*    const includeConditions = [{
-                model: UserGroup,
-                include: [{
-                    model: Group
-                }]
-            }]; */
-            // include: includeConditions  doesn't work. Why?
         });
         if (result) {
             return { user: result, hasUser: !!result };
@@ -128,10 +120,10 @@ export const defineUserModel = sequelize => {
         }
     };
 
-    /*  User.associate = () => {
-       User.hasMany(UserGroup, {foreignKey: 'user_id', sourceKey: 'id'});
-       User.belongsToMany(Group, {through: UserGroup, foreignKey: 'user_id'});
-    }; */
+    User.associate = () => {
+        User.hasMany(UserGroup, { foreignKey: 'user_id', sourceKey: 'id' });
+        User.belongsToMany(Group, { through: UserGroup, foreignKey: 'user_id' });
+    };
 
     return User;
 };

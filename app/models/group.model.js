@@ -41,7 +41,10 @@ export const defineGroupModel = sequelize => {
                 model: UserGroup,
                 attributes: ['id'],
                 include: [{
-                    model: User
+                    model: User,
+                    where: {
+                        is_deleted: false
+                    }
                 }]
             }],
             where: {
@@ -89,10 +92,10 @@ export const defineGroupModel = sequelize => {
         }
     };
 
-    /*  Group.associate = () => {
-        Group.hasMany(UserGroup, {foreignKey: 'group_id', sourceKey: 'id'});
-        Group.belongsToMany(User, {through: UserGroup, foreignKey: 'group_id'});
-    }; */
+    Group.associate = () => {
+        Group.hasMany(UserGroup, { foreignKey: 'group_id', sourceKey: 'id' });
+        Group.belongsToMany(User, { through: UserGroup, foreignKey: 'group_id' });
+    };
 
     return Group;
 };

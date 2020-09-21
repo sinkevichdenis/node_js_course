@@ -96,7 +96,7 @@ export const defineGeneralModel = sequelize => {
     UserGroup.addUsersToGroup = async (groupId, userIds) => {
         const transaction = await sequelize.transaction();
         try {
-            const promisesArray = await userIds.map(userId => {
+            const promisesArray = userIds.map(userId => {
                 return User.findOne({ where: {
                     [Op.and]: [{
                         id: {
@@ -113,25 +113,24 @@ export const defineGeneralModel = sequelize => {
                         if (!user) {
                             return Promise.reject();
                         }
-                        UserGroup.create({
+                        return UserGroup.create({
                             [associationKeys[usersTableName]]: userId,
                             [associationKeys[groupsTableName]]: groupId
                         }, { transaction });
                     });
             });
 
-            await Promise.all(...promisesArray);
+            await Promise.all(promisesArray);
             await transaction.commit();
-        } catch {
+        } catch (err) {
             await transaction.rollback();
         }
     };
 
-    /*  UserGroup.associate = () => {
-        UserGroup.belongsTo(User, {foreignKey: 'user_id'});
-        UserGroup.belongsTo(Group, {foreignKey: 'group_id'});
-    }; */
-
+    UserGroup.associate = () => {
+        UserGroup.belongsTo(User, { foreignKey: 'user_id' });
+        UserGroup.belongsTo(Group, { foreignKey: 'group_id' });
+    };
 
     return UserGroup;
 };
