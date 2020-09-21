@@ -1,5 +1,4 @@
-import { connectModel } from '../services/user.service';
-import { handleSuccess } from '../services/utils.service';
+import { connectModel, handleSuccess } from '../services';
 
 export const connectRoutes = (prefix, model, router) => {
     const modelApi = connectModel(model);

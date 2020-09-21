@@ -1,4 +1,4 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes, Op } from 'sequelize';
 import { MESSAGES } from '../const';
 import config from '../config';
 import { Group, User } from '../data_access';
@@ -93,6 +93,39 @@ export const defineGeneralModel = sequelize => {
         });
     };
 
+    UserGroup.addUsersToGroup = async (groupId, userIds) => {
+        const transaction = await sequelize.transaction();
+        try {
+            const promisesArray = await userIds.map(userId => {
+                return User.findOne({ where: {
+                    [Op.and]: [{
+                        id: {
+                            [Op.eq]: userId
+                        }
+                    }, {
+                        is_deleted: {
+                            [Op.eq]: false
+                        }
+                    }]
+                } }, { transaction })
+                    .then(user => {
+                        console.log('user', user);
+                        if (!user) {
+                            return Promise.reject();
+                        }
+                        UserGroup.create({
+                            [associationKeys[usersTableName]]: userId,
+                            [associationKeys[groupsTableName]]: groupId
+                        }, { transaction });
+                    });
+            });
+
+            await Promise.all(...promisesArray);
+            await transaction.commit();
+        } catch {
+            await transaction.rollback();
+        }
+    };
 
     /*  UserGroup.associate = () => {
         UserGroup.belongsTo(User, {foreignKey: 'user_id'});
