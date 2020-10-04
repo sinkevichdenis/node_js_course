@@ -9,6 +9,7 @@ export const connectRoutes = (prefix, model, router) => {
         try {
             const result = await modelApi.getList(substring, limit);
             handleSuccess(res, 'listLoad', result);
+            return next();
         } catch (e) {
             return next(e);
         }
@@ -18,6 +19,7 @@ export const connectRoutes = (prefix, model, router) => {
         try {
             const result = await modelApi.get(req.params.id);
             handleSuccess(res, 'get', result);
+            return next();
         } catch (e) {
             return next(e);
         }
@@ -27,6 +29,7 @@ export const connectRoutes = (prefix, model, router) => {
         try {
             await modelApi.create(req.body);
             handleSuccess(res, 'add');
+            return next();
         } catch (e) {
             return next(e);
         }
@@ -36,6 +39,7 @@ export const connectRoutes = (prefix, model, router) => {
         try {
             await modelApi.update(req.params.id, req.body);
             handleSuccess(res, 'update');
+            return next();
         } catch (e) {
             return next(e);
         }
@@ -45,6 +49,7 @@ export const connectRoutes = (prefix, model, router) => {
         try {
             await modelApi.remove(req.params.id);
             handleSuccess(res, 'remove');
+            return next();
         } catch (e) {
             return next(e);
         }

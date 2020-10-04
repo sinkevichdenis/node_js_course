@@ -1,7 +1,8 @@
 import { Sequelize } from 'sequelize';
 import { MESSAGES } from '../const';
+import { logErrorHandler } from './logger';
 
-export const ErrorHandler = (res, e) => {
+export const ErrorHandler = (req, res, e) => {
     const messages = {};
     let status;
 
@@ -36,4 +37,6 @@ export const ErrorHandler = (res, e) => {
     }
 
     res.status(status).json({ messages: { errors: messages } });
+
+    logErrorHandler(e, req);
 };
