@@ -7,22 +7,9 @@ import { logErrorHandler, logInfoHandler } from './middlewars/logger';
 const app = express();
 const PORT = config.get('port');
 
-const callbackError = () => {
-    try {
-        setTimeout(() => {
-            throw new Error('Error in call back!!!!!!');
-        }, 3000);
-    } catch (e) {
-        console.log(e);
-    }
-};
-callbackError();
-// callback is handled as uncaughtException!
-
 Promise.reject(new Error('Promise Error'));
-// why isn't promise handled as uncaughtException?
 
-process.on('uncaughtException', err => {
+process.on('unhandledRejection', err => {
     logErrorHandler(err);
 });
 
