@@ -19,14 +19,18 @@ const logger = createLogger({
     ]
 });
 
-export const logInfoHandler = (req) => {
+export const logInfoHandler = (req, res) => {
     logger.info({
         service: req.route?.path,
         method: req.method,
         url: req.url,
         query: req.query,
         body: req.body,
-        id: req.params.id
+        id: req.params.id,
+        response: {
+            statusCode: res.statusCode,
+            statusMessage: res.statusMessage
+        }
     });
 };
 
@@ -41,3 +45,8 @@ export const logErrorHandler = (err, req = {}) => {
         stack: err.stack
     });
 };
+
+export const loggerMiddleware = (req, res, next) => {
+    res.on('finish', () => logInfoHandler(req, res));
+    next();
+}

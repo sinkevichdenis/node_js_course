@@ -1,19 +1,19 @@
 import { Sequelize } from 'sequelize';
 import { MESSAGES } from '../const';
-import { logErrorHandler } from './logger';
+import { logErrorHandler } from './loggerMiddleware';
 
-export const ErrorHandler = (req, res, e) => {
+export const errorMiddleware = (err, req, res, next) => {
     const messages = {};
     let status;
 
-    if (e instanceof ReferenceError) {
+    if (err instanceof ReferenceError) {
         status = 404;
-        messages.notFound = e.message;
+        messages.notFound = err.message;
     }
 
-    if (e instanceof Sequelize.ValidationError) {
+    if (err instanceof Sequelize.ValidationError) {
         status = 400;
-        e.errors.forEach(error => {
+        err.errors.forEach(error => {
             const errMessages = MESSAGES.errors;
             let message;
             switch (error.validatorKey) {
@@ -33,10 +33,11 @@ export const ErrorHandler = (req, res, e) => {
 
     if (!Object.values(messages).length) {
         status = 500;
-        messages.server = e.message;
+        messages.server = err.message;
     }
 
     res.status(status).json({ messages: { errors: messages } });
 
-    logErrorHandler(e, req);
+    logErrorHandler(err, req);
+    next();
 };
