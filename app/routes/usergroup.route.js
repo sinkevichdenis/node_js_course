@@ -6,9 +6,9 @@ export const connectGroupUserRoutes = (prefix, router) => {
 
     router.post(`${prefix}/addUsersToGroup`, async (req, res, next) => {
         try {
-            const result = await modelApi.addUsersToGroup(req.body);
-            console.log('result', result);
+            await modelApi.addUsersToGroup(req.body);
             handleSuccess(res, 'add');
+            return next();
         } catch (e) {
             return next(e);
         }
