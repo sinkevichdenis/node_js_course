@@ -5,7 +5,7 @@ export const connectAuthRoutes =  (prefix, router) => {
     router.post(prefix, async (req, res, next) => {
         try {
             let token = await login(req.body.login, req.body.password);
-            res.send( token ? {token} : 401);
+            token ? res.send({token}) : res.sendStatus(401);
             return next();
         } catch (e) {
             return next(e);
