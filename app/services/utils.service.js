@@ -8,8 +8,8 @@ export const handleSuccess = (res,  msgKey = 'default', body = {}) => {
     res.status(200).json({ messages: { success: message[msgKey] }, ...body });
 };
 
-export const login = async (login, password) => {
-    let user = await User.authenticate(login, password);
+export const login = async (username, password) => {
+    const user = await User.authenticate(username, password);
     const secret = config.get('privateKey');
-    return user ? jwt.sign({userId: user.id}, secret, {expiresIn: 120}) : null;
+    return user ? jwt.sign({ userId: user.id }, secret, { expiresIn: 120 }) : null;
 };
