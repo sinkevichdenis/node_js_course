@@ -25,7 +25,7 @@ export const connectRoutes = (prefix, model, router) => {
         }
     });
 
-    router.post(`${prefix}`, async (req, res, next) => {
+    router.post(prefix, async (req, res, next) => {
         try {
             await modelApi.create(req.body);
             handleSuccess(res, 'add');
