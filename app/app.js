@@ -13,8 +13,8 @@ process.on('uncaughtException', logErrorHandler);
 
 app.use(cors());
 app.use(express.json({ extended: true }));
-app.use(authMiddleware);
 app.use('/', router);
+app.use(authMiddleware);
 app.use(loggerMiddleware);
 app.use(errorMiddleware);
 

@@ -1,6 +1,5 @@
 import { login } from '../services/utils.service';
 
-// console.log('TOKEN LOGIN', await login('DenisUpdated', '66699'))
 export const connectAuthRoutes =  (prefix, router) => {
     router.post(prefix, async (req, res, next) => {
         try {
