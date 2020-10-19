@@ -49,4 +49,4 @@ export const logErrorHandler = (err, req = {}) => {
 export const loggerMiddleware = (req, res, next) => {
     res.on('finish', () => logInfoHandler(req, res));
     next();
-}
+};

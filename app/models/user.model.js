@@ -120,6 +120,27 @@ export const defineUserModel = sequelize => {
         }
     };
 
+    User.authenticate = async (login, password) => {
+        const result = await User.findOne({
+            where: {
+                [Op.and]: [{
+                    login: {
+                        [Op.eq]: login
+                    }
+                }, {
+                    password: {
+                        [Op.eq]: password
+                    }
+                }, {
+                    is_deleted: {
+                        [Op.eq]: false
+                    }
+                }]
+            }
+        });
+        return result ? { id: result.getDataValue('id') } : null;
+    };
+
     User.associate = () => {
         User.hasMany(UserGroup, { foreignKey: 'user_id', sourceKey: 'id' });
         User.belongsToMany(Group, { through: UserGroup, foreignKey: 'user_id' });
