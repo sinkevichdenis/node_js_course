@@ -1,14 +1,12 @@
+import {restMiddleware} from "../middlewars";
 
-
-import express from 'express';
-import request from 'supertest';
-import { privateRouter } from './app.route';
-import { connectRoutes } from "./user.route";
-import { User } from "../data_access";
-
-const app = express();
-app.use('/', privateRouter);
-//connectRoutes('/user', User, privateRouter);
+const modelMock = {
+    getList: () => 'getLIst',
+    get: () => 'get',
+    put: () => 'put',
+    post: () => 'post',
+    remove: () => 'remove',
+};
 
 describe('Sample Test', () => {
     it('should test that true === true', () => {
@@ -16,12 +14,12 @@ describe('Sample Test', () => {
     })
 })
 
-describe("testing-server-routes",  () => {
-    it("GET /states - success", async () => {
-        const res = await request(app).get('/user/list')
-        console.log('body', res);
-        expect('test').toEqual('test')
-    });
+describe("User model",  () => {
+    const rest = () => restMiddleware(modelMock);
+    it('should return true rest', () => {
+        console.log('REST', rest);
+        expect(rest).toBeTruthy();
+    })
 });
 
 

@@ -2,7 +2,7 @@ import { connectModel, handleSuccess } from '../services';
 import { restMiddleware } from '../middlewars';
 
 export const connectRoutes = (prefix, model, router) => {
-    const middleware =  restMiddleware(connectModel(model));
+    const middleware =  restMiddleware(model);
 
     router.get(`${prefix}/list`, middleware.getList);
     router.get(`${prefix}/:id`, middleware.get);
