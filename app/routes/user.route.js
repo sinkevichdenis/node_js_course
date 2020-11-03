@@ -1,4 +1,3 @@
-import { connectModel, handleSuccess } from '../services';
 import { restMiddleware } from '../middlewars';
 
 export const connectRoutes = (prefix, model, router) => {

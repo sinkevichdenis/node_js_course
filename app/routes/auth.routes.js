@@ -1,4 +1,4 @@
-import { login } from '../services/utils.service';
+import { login } from '../services';
 
 export const connectAuthRoutes =  (prefix, router) => {
     router.post(prefix, async (req, res, next) => {

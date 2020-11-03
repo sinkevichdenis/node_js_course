@@ -1,4 +1,4 @@
-import { handleSuccess } from '../services';
+import { handleSuccess } from '../services/utils.service';
 
 export const restMiddleware = model => {
     const getList = async (req, res, next) => {
